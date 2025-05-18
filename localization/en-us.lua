@@ -295,6 +295,14 @@ return {
                     "{C:inactive}(Currently {C:money}$#2#{C:inactive}/$40 Max)",
                 }
             },
+            c_poke_heavydutyboots = {
+                name = "Heavy Duty Boots",
+                text = {
+                    "{C:purple}+#1# Hazards {C:inactive}(1 per #2# cards)",
+                    "Adds an additional set of {C:purple}Hazard Cards {C:inactive}",
+                    "to your deck this round",
+                }
+            }
         },
         Energy = {
             c_poke_grass_energy = {

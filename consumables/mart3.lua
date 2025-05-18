@@ -196,7 +196,7 @@ local heavydutyboots = {
   key = "heavydutyboots",
   set = "Item",
   config = {extra = {money = 4, hazard_ratio=10}},
-  loc_vars = function(self, info_queue, center)
+  loc_vars = function(self, info_queue, card)
     local abbr = card.ability.extra
     info_queue[#info_queue+1] = {set = 'Other', key = 'endless'}
     info_queue[#info_queue+1] = {set = 'Other', key = 'poke_hazards'}
@@ -227,14 +227,17 @@ local heavydutyboots = {
     if G.GAME.blind == nil then return false end
   end,
   use = function(self, card, area, copier)
-    if context.setting_blind then
-      poke_add_hazards(card.ability.extra.hazard_ratio)
-    end
+    poke_add_hazards(card.ability.extra.hazard_ratio)
+  end,
   keep_on_use = function(self, card)
     return true
   end,
-  in_pool = function(self)
-    return next(SMODS.find_card("poke_add_hazards"))
+ in_pool = function(self)
+  for _, joker in ipairs(G.jokers.cards) do
+    if joker.ability.extra and joker.ability.extra.hazard_ratio then
+    return true
+    end
+  return false
   end
 }
 
