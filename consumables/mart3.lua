@@ -191,6 +191,53 @@ local dawnstone = {
   end
 }
 
+local heavydutyboots = {
+  name = "heavydutyboots",
+  key = "heavydutyboots",
+  set = "Item",
+  config = {extra = {money = 4, hazard_ratio=10}},
+  loc_vars = function(self, info_queue, center)
+    local abbr = card.ability.extra
+    info_queue[#info_queue+1] = {set = 'Other', key = 'endless'}
+    info_queue[#info_queue+1] = {set = 'Other', key = 'poke_hazards'}
+    info_queue[#info_queue+1] = G.P_CENTERS.m_poke_hazard
+
+    local to_add = math.floor(52 / abbr.hazard_ratio)
+    if G.playing_cards then
+      local count = #G.playing_cards
+      for _, v in pairs(G.playing_cards) do
+        if SMODS.has_enhancement(v, "m_poke_hazard") then
+          count = count - 1
+        end
+      end
+      to_add = math.floor(count / abbr.hazard_ratio)
+    end
+    return {vars = {to_add, abbr.hazard_ratio,}}
+  end,
+  pos = { x = 0, y = 0 },
+  atlas = "placeholder_item",
+  cost = 3,
+  evo_item = false,
+  unlocked = true,
+  discovered = true,
+  can_use = function(self, card)
+    if G.STATE == G.STATES.SMODS_BOOSTER_OPENED or G.STATE == G.STATES.TAROT_PACK or G.STATE == G.STATES.SPECTRAL_PACK or G.STATE == G.STATES.PLANET_PACK
+       or G.STATE == G.STATES.STANDARD_PACK then return false end
+    if card.area == G.shop_jokers then return false end
+    if G.GAME.blind == nil then return false end
+  end,
+  use = function(self, card, area, copier)
+    if context.setting_blind then
+      poke_add_hazards(card.ability.extra.hazard_ratio)
+    end
+  keep_on_use = function(self, card)
+    return true
+  end,
+  in_pool = function(self)
+    return next(SMODS.find_card("poke_add_hazards"))
+  end
+}
+
 return {name = "Items 3",
-        list = {prismscale, dawnstone,duskstone}
+        list = {prismscale, dawnstone, duskstone, heavydutyboots}
 }
